@@ -11,21 +11,21 @@ package controlador;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import modelo.Bola;
 import modelo.Canion;
 import vista.PanelJuego;
 
 public class ControladorTeclado implements KeyListener {
 	
 	Canion canion;
+	Bola bolaCanion;
 	PanelJuego panel;
-	public ControladorTeclado(Canion can, PanelJuego panelJuego){
+	public ControladorTeclado(Canion can, PanelJuego panelJuego, Bola bolaCan){
 		setCanion(can);
 		setPanel(panelJuego);
+		setBolaCanion(bolaCan);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
-	 */
 	public Canion getCanion() {
 		return canion;
 	}
@@ -36,34 +36,26 @@ public class ControladorTeclado implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getKeyCode() == KeyEvent.VK_A)
-		System.out.println("Presiono la A");
-		canion.mover(e);
-		getPanel().repaint();
-	}
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
-	 */
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT){
-			canion.mover(e);
+			getCanion().mover(e);
+			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
+			getPanel().repaint();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_SPACE){
+			System.out.println("Me lanzie");
 			getPanel().repaint();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
-	 */
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub+System.out.println("Presiono la A")
-		System.out.println("Presiono la A");
-		canion.mover(e);
-		getPanel().repaint();
 
 	}
 
@@ -73,6 +65,14 @@ public class ControladorTeclado implements KeyListener {
 
 	public void setPanel(PanelJuego panel) {
 		this.panel = panel;
+	}
+
+	public Bola getBolaCanion() {
+		return bolaCanion;
+	}
+
+	public void setBolaCanion(Bola bolaCanion) {
+		this.bolaCanion = bolaCanion;
 	}
 
 }
