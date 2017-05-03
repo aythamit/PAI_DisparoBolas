@@ -40,12 +40,27 @@ public class ControladorTeclado implements KeyListener {
 			getCanion().mover(e);
 			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
 			getPanel().repaint();
+		} else if(e.getKeyCode() == KeyEvent.VK_SPACE){
+			Thread one = new Thread(new Runnable(){
+				public void run() {
+					try {
+						int cont = 0;
+						while(cont < 200){
+						getBolaCanion().move();
+						getPanel().repaint();
+						Thread.sleep(100);
+						cont++;
+						}
+					} catch (Exception e){ e.printStackTrace(); }
+					
+					}
+				});
+				one.start();
+
+			}
+		
+			
 		}
-		if(e.getKeyCode() == KeyEvent.VK_SPACE){
-			System.out.println("Me lanzie");
-			getPanel().repaint();
-		}
-	}
 
 
 	@Override

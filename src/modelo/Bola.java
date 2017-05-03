@@ -10,10 +10,12 @@ package modelo;
 
 import java.awt.Color;
 
+import vista.PanelJuego;
+
 public class Bola {
 
 	public static final int ESTATICA = 0;
-	public static final int VELOCIDAD = 5;
+	public static final int VELOCIDAD = 10;
 	public static final int TAMANIO = 20;
 	public static final int POSCANION = TAMANIO / 2;
 	Color color;
@@ -29,6 +31,9 @@ public class Bola {
 		if(modo == ESTATICA){
 			setVelocidadX(ESTATICA);
 			setVelocidadY(ESTATICA);
+		}else{
+			setVelocidadX(VELOCIDAD);
+			setVelocidadY(VELOCIDAD);
 		}
 		
 	}
@@ -84,6 +89,19 @@ public class Bola {
 	public void moveCanion(int xFinal, int yFinal) {
 		setX(xFinal - POSCANION);
 		setY(yFinal - POSCANION);
+		
+	}
+
+
+
+	public void move() {
+		
+		setX( getX() - getVelocidadX());
+		setY( getY() - getVelocidadY());
+		if(getX() >= PanelJuego.PANEL_WIDTH || x < 0)
+			setVelocidadX( -getVelocidadX());
+		if(getY() >= PanelJuego.PANEL_HEIGTH || getY() < 0)
+			setVelocidadY( -getVelocidadY());
 		
 	}
 
