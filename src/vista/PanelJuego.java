@@ -12,8 +12,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JPanel;
 
+import controlador.ControladorTeclado;
 import modelo.Canion;
 
 @SuppressWarnings("serial")
@@ -27,6 +31,13 @@ public class PanelJuego extends JPanel {
 	public PanelJuego(){
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
 		setBackground(Color.CYAN);
+		System.out.println("Holica");
+//		KeyListener listener = new MyKeyListener();
+//		addKeyListener(listener);
+		setFocusable(true);
+		ControladorTeclado tecladoListen= new ControladorTeclado(canion, this);
+		
+		addKeyListener(tecladoListen);
 	}
 	
 	public void paintComponent(Graphics g){

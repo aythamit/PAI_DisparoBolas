@@ -19,9 +19,11 @@ public class VentanaJuego extends JFrame {
 	private PanelJuego bubbleshot;
 	
 	public VentanaJuego(){
-		initVentanta();
+		
 		bubbleshot = new PanelJuego();
 		add(bubbleshot);
+		initVentanta();
+		
 	}
 
 	private void initVentanta() {

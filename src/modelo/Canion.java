@@ -8,6 +8,8 @@
  */
 package modelo;
 
+import java.awt.event.KeyEvent;
+
 public class Canion {
 	
 	private final static int GRADOS_MIN = 0;
@@ -24,6 +26,9 @@ public class Canion {
 		setxInicio(x);
 		setyInicio(y);
 		setGrados(GRADOS_INICIO);
+		calculaFinal();
+	}
+	public void calculaFinal(){
 		setxFinal( (int) (getxInicio() - TAMANIO_CANION * Math.cos(Math.toRadians(getGrados()))) );
 		setyFinal((int) (getyInicio() - TAMANIO_CANION * Math.sin(Math.toRadians(getGrados()))));
 	}
@@ -69,6 +74,16 @@ public class Canion {
 			this.grados = grados;
 		else
 			System.out.println("Lanzar excepcion");
+	}
+
+	public void mover(KeyEvent e) {
+		
+		if(e.getKeyCode() == KeyEvent.VK_LEFT){
+			setGrados( getGrados() - 1 );
+		} else
+			setGrados( getGrados() + 1 );
+			calculaFinal();
+		
 	}
 	
 
