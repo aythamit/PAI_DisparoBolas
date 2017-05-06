@@ -9,6 +9,7 @@
 package modelo;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import vista.PanelJuego;
 
@@ -23,11 +24,12 @@ public class Bola {
 	private int y;
 	private int velocidadX;
 	private int velocidadY;
-	
+	private boolean running;
 	public Bola(int x, int y, int modo){
 		setX(x);
 		setY(y);
-		setColor(Color.BLUE);
+		setRunning(false);
+		setColor(Utiles.colorBolaAleatorio());
 		if(modo == ESTATICA){
 			setVelocidadX(ESTATICA);
 			setVelocidadY(ESTATICA);
@@ -96,13 +98,55 @@ public class Bola {
 
 	public void move() {
 		
-		setX( getX() - getVelocidadX());
+		//setX( getX() - getVelocidadX());
 		setY( getY() - getVelocidadY());
 		if(getX() >= PanelJuego.PANEL_WIDTH || x < 0)
 			setVelocidadX( -getVelocidadX());
 		if(getY() >= PanelJuego.PANEL_HEIGTH || getY() < 0)
 			setVelocidadY( -getVelocidadY());
 		
+	}
+
+
+
+	public boolean isRunning() {
+		return running;
+	}
+
+
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Bola [x=" + x + ", y=" + y + "]";
+	}
+
+
+
+	public boolean isColision(ArrayList<Bola> nivel) {
+		if(getY() <= 5)
+			return true;
+		else{
+			for(Bola it : nivel){
+				if( choca(it))
+					return true;
+			}
+		}
+		return false;
+	}
+
+
+
+	private boolean choca(Bola it) {
+		//System.out.println("Bola y " + getY() + " Nivel it: " + it.getY() + 20);
+			if(/*getX() == it.getX() &&*/ getY() == (it.getY() + 20))
+				return true;
+		return false;
 	}
 
 	

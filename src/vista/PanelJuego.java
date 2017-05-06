@@ -12,12 +12,14 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import controlador.ControladorTeclado;
 import modelo.Bola;
 import modelo.Canion;
+import modelo.Utiles;
 
 @SuppressWarnings("serial")
 public class PanelJuego extends JPanel {
@@ -27,15 +29,19 @@ public class PanelJuego extends JPanel {
 	
 	Canion canion = new Canion(PANEL_WIDTH / 2 , PANEL_HEIGTH -40);
 	Bola bolaCanion;
+	ArrayList<Bola> nivel;
 	
 	public PanelJuego(){
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
 		setBackground(Color.CYAN);
 		setFocusable(true);
+		setNivel(new ArrayList<Bola>());
 		setBolaCanion(new Bola(canion.getxFinal() - Bola.POSCANION , canion.getyFinal() - Bola.POSCANION 
 				, Bola.VELOCIDAD));
-		ControladorTeclado tecladoListen= new ControladorTeclado(getCanion(), this, getBolaCanion());
-		
+		int yPos = 0;
+		int nBolas = PANEL_WIDTH / Bola.TAMANIO;
+		Utiles.aniadirBolas( yPos, nBolas , getNivel());
+		ControladorTeclado tecladoListen= new ControladorTeclado(getCanion(), this, getBolaCanion() , getNivel());
 		addKeyListener(tecladoListen);
 	}
 	
@@ -44,6 +50,7 @@ public class PanelJuego extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		dibujaCanion(g2);
 		dibujaBola(g2);
+		dibujaNivel(g2);
 	}
 
 	private void dibujaBola(Graphics2D g2) {
@@ -52,6 +59,14 @@ public class PanelJuego extends JPanel {
 		g2.fillOval(getBolaCanion().getX(), getBolaCanion().getY(), Bola.TAMANIO, Bola.TAMANIO);
 	}
 
+	private void dibujaNivel(Graphics2D g2) {
+		// TODO Auto-generated method stub
+		for(Bola it : getNivel()){
+			g2.setColor(it.getColor());
+			g2.fillOval(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
+		}
+		
+	}
 	private void dibujaCanion(Graphics2D g2) {
 		// TODO Auto-generated method stub
 		g2.setStroke(new BasicStroke(4));
@@ -74,6 +89,14 @@ public class PanelJuego extends JPanel {
 
 	public void setBolaCanion(Bola bolaCanion) {
 		this.bolaCanion = bolaCanion;
+	}
+
+	public ArrayList<Bola> getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(ArrayList<Bola> nivel) {
+		this.nivel = nivel;
 	}
 
 }
