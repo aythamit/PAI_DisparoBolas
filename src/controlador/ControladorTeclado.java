@@ -67,23 +67,31 @@ public class ControladorTeclado implements KeyListener {
 			public void run() {
 				try {
 					
-					while(!getBolaCanion().isColision(getNivel())){ // Mientras este rodando
-						//System.out.println(getBolaCanion());
+					Bola temporal = null;
+					while(temporal == null){ // Mientras este rodando
+						temporal = getBolaCanion().Colision(getNivel());
 						getBolaCanion().move();
 						getPanel().repaint();
-						Thread.sleep(100);
+						Thread.sleep(5);
 					} // Cuando colisiona ->
-					
-					Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY(), Bola.ESTATICA);
+					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del cañon: " + getBolaCanion().getColor());
+					if(temporal.getColor().equals(getBolaCanion().getColor())){
+						//Elimimanos temporal del array
+						//System.out.println("Son del mismo color");
+						getNivel().remove(temporal);
+					}else{
+						//La metemos dentro del array
+					Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY() + 1, Bola.ESTATICA);
 					bolaTemp.setColor(getBolaCanion().getColor());
 					getNivel().add(bolaTemp);		
-
+					}
 					getBolaCanion().setX(canion.getxFinal() - Bola.POSCANION);
 					getBolaCanion().setY(canion.getyFinal() - Bola.POSCANION);
 					getBolaCanion().setColor(Utiles.colorBolaAleatorio());
 					
 					getNivel().get(2).setColor(Color.BLACK);
 					getPanel().repaint();
+					
 				} catch (Exception e){ e.printStackTrace(); }
 				
 				}

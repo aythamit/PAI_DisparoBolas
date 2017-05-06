@@ -16,9 +16,10 @@ import vista.PanelJuego;
 public class Bola {
 
 	public static final int ESTATICA = 0;
-	public static final int VELOCIDAD = 10;
+	public static final int VELOCIDAD = 1;
 	public static final int TAMANIO = 20;
 	public static final int POSCANION = TAMANIO / 2;
+	private static final int CENTRO = TAMANIO / 2;
 	Color color;
 	private int x;
 	private int y;
@@ -129,7 +130,9 @@ public class Bola {
 
 
 	public boolean isColision(ArrayList<Bola> nivel) {
-		if(getY() <= 5)
+		
+		//porque esa Y??
+		if(getY() <= 0)
 			return true;
 		else{
 			for(Bola it : nivel){
@@ -138,14 +141,40 @@ public class Bola {
 			}
 		}
 		return false;
+		
+	}
+	public Bola Colision(ArrayList<Bola> nivel) {
+		
+		//porque esa Y??
+		if(getY() <= 0)
+			return this;
+
+			for(Bola it : nivel){
+				if( choca(it))
+					return it;
+			}
+		
+		return null;
+		
+	}
+
+	private boolean choca(Bola it) {
+			// Si la bola llega a la misma posicion
+		ArrayList<Integer> puntosCalientes = new ArrayList<Integer>();
+			if( dentroCuadrado(getX() + (CENTRO ), it)){
+				//it.setColor(Color.BLACK);
+				return true;
+			}
+			//if()
+		return false;
 	}
 
 
 
-	private boolean choca(Bola it) {
-		//System.out.println("Bola y " + getY() + " Nivel it: " + it.getY() + 20);
-			if(/*getX() == it.getX() &&*/ getY() == (it.getY() + 20))
-				return true;
+	private boolean dentroCuadrado(int pCaliente, Bola it) {
+		if( (pCaliente >= it.getX() && pCaliente <= (it.getX() + TAMANIO)) && 
+				( getY() >= it.getVelocidadY() && getY() <= (it.getY() + TAMANIO))  )
+			return true;
 		return false;
 	}
 
