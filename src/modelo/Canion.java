@@ -32,6 +32,17 @@ public class Canion {
 		setxFinal( (int) (getxInicio() - TAMANIO_CANION * Math.cos(Math.toRadians(getGrados()))) );
 		setyFinal((int) (getyInicio() - TAMANIO_CANION * Math.sin(Math.toRadians(getGrados()))));
 	}
+	
+	public void calculoNuevaPos(int xRaton, int yRaton){
+		// Calculo distancia raiz de a2 b2 -- a = xRaton - x
+		int a = xRaton - getxInicio();
+		int b = yRaton - getyInicio();
+		double distancia = Math.sqrt( ( Math.pow(a, 2)) + ( Math.pow(b, 2)));
+		double grados = Math.acos( (-xRaton + getxInicio() ) / distancia);
+
+		setGrados((int) Math.toDegrees(grados));
+		calculaFinal();
+	}
 
 	public int getxInicio() {
 		return xInicio;

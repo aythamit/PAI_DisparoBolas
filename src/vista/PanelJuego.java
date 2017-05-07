@@ -43,6 +43,7 @@ public class PanelJuego extends JPanel {
 		Utiles.aniadirBolas( yPos, nBolas , getNivel());
 		ControladorTeclado tecladoListen= new ControladorTeclado(getCanion(), this, getBolaCanion() , getNivel());
 		addKeyListener(tecladoListen);
+		addMouseListener(tecladoListen);
 	}
 	
 	public void paintComponent(Graphics g){

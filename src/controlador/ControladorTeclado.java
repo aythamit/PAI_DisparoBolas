@@ -11,6 +11,8 @@ package controlador;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import modelo.Bola;
@@ -18,7 +20,7 @@ import modelo.Canion;
 import modelo.Utiles;
 import vista.PanelJuego;
 
-public class ControladorTeclado implements KeyListener {
+public class ControladorTeclado implements KeyListener , MouseListener{
 	
 	Canion canion;
 	Bola bolaCanion;
@@ -47,7 +49,7 @@ public class ControladorTeclado implements KeyListener {
 				getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
 			getPanel().repaint();
 		} if(e.getKeyCode() == KeyEvent.VK_SPACE && !getBolaCanion().isRunning()){
-			System.out.println(getBolaCanion().getX() + " == " + getCanion().getxFinal());
+			
 				lanzarBola();
 				if(getBolaCanion().isRunning()){
 				//x.interrupt();
@@ -135,6 +137,40 @@ public class ControladorTeclado implements KeyListener {
 
 	public void setNivel(ArrayList<Bola> nivel) {
 		this.nivel = nivel;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+		getCanion().calculoNuevaPos(e.getX(), e.getY());
+		if(!getBolaCanion().isRunning())
+			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
+		getPanel().repaint();
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
