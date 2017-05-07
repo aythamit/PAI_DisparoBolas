@@ -19,16 +19,23 @@ public class Bola {
 	public static final int VELOCIDAD = 1;
 	public static final int TAMANIO = 20;
 	public static final int POSCANION = TAMANIO / 2;
-	private static final int CENTRO = TAMANIO / 2;
+	private static final int RADIO = TAMANIO / 2;
 	Color color;
 	private int x;
 	private int y;
+	private double angulo;
+	private int xCanion;
+	private int yCanion;
+	
+	
 	private int velocidadX;
 	private int velocidadY;
 	private boolean running;
+	private boolean derecha = false;
+	
 	public Bola(int x, int y, int modo){
-		setX(x);
-		setY(y);
+		setAngulo(0);
+		reset(x, y);
 		setRunning(false);
 		setColor(Utiles.colorBolaAleatorio());
 		if(modo == ESTATICA){
@@ -90,8 +97,10 @@ public class Bola {
 
 
 	public void moveCanion(int xFinal, int yFinal) {
-		setX(xFinal - POSCANION);
-		setY(yFinal - POSCANION);
+		setX(xFinal);
+		setY(yFinal);
+		setxCanion(xFinal);
+		setyCanion(yFinal);
 		
 	}
 
@@ -99,13 +108,52 @@ public class Bola {
 
 	public void move() {
 		
-		//setX( getX() - getVelocidadX());
-		setY( getY() - getVelocidadY());
-		if(getX() >= PanelJuego.PANEL_WIDTH || x < 0)
-			setVelocidadX( -getVelocidadX());
-		if(getY() >= PanelJuego.PANEL_HEIGTH || getY() < 0)
-			setVelocidadY( -getVelocidadY());
+		if(getX() <= 0 ){
+		 setAngulo(180 - getAngulo());
+		 setxCanion(getX() + 1);
+		 setyCanion(getY());
+		 System.out.println("incio " + xCanion + " final " + yCanion);
+		 setVelocidadX(VELOCIDAD);
+		}else if(getX() >= PanelJuego.PANEL_WIDTH - Bola.TAMANIO ){
+			derecha = false;
+			setAngulo(180 - getAngulo());
+			 xCanion = getX();
+			 yCanion = getY();
+			 setVelocidadX(VELOCIDAD);
+		}
 		
+		int yCentro = getY();
+		int xFinal = 0, yFinal = 0;
+		if(getAngulo() == 90){
+			xFinal = getX();
+			yFinal = getY() + VELOCIDAD;
+		}
+		else if(getAngulo() < 90){
+			xFinal = (int) (xCanion - getVelocidadX() * Math.cos(Math.toRadians(getAngulo()))) ;
+		   
+		} else if (getAngulo() > 90){
+			double ang =  getAngulo();
+			if(!derecha){
+				 xFinal = (int) (getxCanion()  - getVelocidadX() * Math.cos(Math.toRadians(ang))) ;
+			}
+			else{
+				xFinal = (int) (getxCanion()  + getVelocidadX() * Math.cos(Math.toRadians(ang))) ;
+			}
+
+		}
+		yFinal = (int) (yCanion - getVelocidadX() * Math.sin(Math.toRadians(getAngulo()))) ;
+		setX( xFinal );
+		setY( yFinal );
+		setVelocidadX(getVelocidadX()+ 1);
+//		double radians = Math.toRadians(grados);
+//		double pendiente = Math.tan(radians);
+//		// System.out.println(getY() + " y = " + pendiente + " x -> " + (int)(getX() * pendiente) );
+//		//setX( getX() - getVelocidadX());
+//		setY( getY() - getVelocidadY());
+//		if(getX() >= PanelJuego.PANEL_WIDTH || x < 0)
+//			setVelocidadX( -getVelocidadX());
+//		if(getY() >= PanelJuego.PANEL_HEIGTH || getY() < 0)
+//			setVelocidadY( -getVelocidadY());
 	}
 
 
@@ -161,7 +209,7 @@ public class Bola {
 	private boolean choca(Bola it) {
 			// Si la bola llega a la misma posicion
 		ArrayList<Integer> puntosCalientes = new ArrayList<Integer>();
-			if( dentroCuadrado(getX() + (CENTRO ), it)){
+			if( dentroCuadrado(getX() + (RADIO ), it)){
 				//it.setColor(Color.BLACK);
 				return true;
 			}
@@ -170,12 +218,57 @@ public class Bola {
 	}
 
 
-
 	private boolean dentroCuadrado(int pCaliente, Bola it) {
 		if( (pCaliente >= it.getX() && pCaliente <= (it.getX() + TAMANIO)) && 
 				( getY() >= it.getVelocidadY() && getY() <= (it.getY() + TAMANIO))  )
 			return true;
 		return false;
+	}
+
+
+
+	public double getAngulo() {
+		return angulo;
+	}
+
+
+
+	public void setAngulo(double angulo) {
+		this.angulo = angulo;
+	}
+
+
+
+	public int getxCanion() {
+		return xCanion;
+	}
+
+
+
+	public void setxCanion(int xCanion) {
+		this.xCanion = xCanion;
+	}
+
+
+
+	public int getyCanion() {
+		return yCanion;
+	}
+
+
+
+	public void setyCanion(int yCanion) {
+		this.yCanion = yCanion;
+	}
+
+
+
+	public void reset(int x, int y) {
+		setX(x);
+		setY(y);
+		setxCanion(getX());
+		setyCanion(getY());
+		setVelocidadX(VELOCIDAD);
 	}
 
 	

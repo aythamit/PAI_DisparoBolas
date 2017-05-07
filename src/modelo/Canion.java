@@ -20,7 +20,7 @@ public class Canion {
 	private int yInicio; // Posicion inicio y del cañon
 	private int xFinal; // Posicion final x del cañon
 	private int yFinal; // Posicion final y del cañon
-	private int grados; //Grado de inclinacion
+	private double grados; //Grado de inclinacion
 	
 	public Canion(int x, int y){
 		setxInicio(x);
@@ -76,11 +76,11 @@ public class Canion {
 		this.yFinal = yFinal;
 	}
 
-	public int getGrados() {
+	public double getGrados() {
 		return grados;
 	}
 
-	public void setGrados(int grados) {
+	public void setGrados(double grados) {
 		if( grados > GRADOS_MIN && grados < GRADOS_MAX)
 			this.grados = grados;
 		else

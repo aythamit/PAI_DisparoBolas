@@ -22,6 +22,8 @@ import vista.PanelJuego;
 
 public class ControladorTeclado implements KeyListener , MouseListener{
 	
+	private static final int TIEMPO = 5;
+	
 	Canion canion;
 	Bola bolaCanion;
 	PanelJuego panel;
@@ -47,6 +49,7 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 			getCanion().mover(e);
 			if(!getBolaCanion().isRunning())
 				getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
+				getBolaCanion().setAngulo(getCanion().getGrados());
 			getPanel().repaint();
 		} if(e.getKeyCode() == KeyEvent.VK_SPACE && !getBolaCanion().isRunning()){
 			
@@ -68,16 +71,16 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 		Thread one = new Thread(new Runnable(){
 			public void run() {
 				try {
-					
+					getBolaCanion().setAngulo( getCanion().getGrados());
 					Bola temporal = null;
 					while(temporal == null){ // Mientras este rodando
 						temporal = getBolaCanion().Colision(getNivel());
 						getBolaCanion().move();
 						getPanel().repaint();
-						Thread.sleep(5);
+						Thread.sleep(TIEMPO);
 					} // Cuando colisiona ->
 					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del cañon: " + getBolaCanion().getColor());
-					if(temporal.getColor().equals(getBolaCanion().getColor())){
+					if( !temporal.equals(getBolaCanion()) && temporal.getColor().equals(getBolaCanion().getColor())){
 						//Elimimanos temporal del array
 						//System.out.println("Son del mismo color");
 						getNivel().remove(temporal);
@@ -87,8 +90,8 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 					bolaTemp.setColor(getBolaCanion().getColor());
 					getNivel().add(bolaTemp);		
 					}
-					getBolaCanion().setX(canion.getxFinal() - Bola.POSCANION);
-					getBolaCanion().setY(canion.getyFinal() - Bola.POSCANION);
+					
+					getBolaCanion().reset(getCanion().getxFinal() , getCanion().getyFinal());
 					getBolaCanion().setColor(Utiles.colorBolaAleatorio());
 					
 					getNivel().get(2).setColor(Color.BLACK);
@@ -163,6 +166,7 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 		getCanion().calculoNuevaPos(e.getX(), e.getY());
 		if(!getBolaCanion().isRunning())
 			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
+		getBolaCanion().setAngulo(getCanion().getGrados());
 		getPanel().repaint();
 		
 	}
