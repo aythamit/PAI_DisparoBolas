@@ -68,12 +68,12 @@ public class Utiles {
 			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
 				x += Bola.TAMANIO;
 		}
-		x = 10;
-		yPos = 20;
-		for(int i = 0; i < nBolas - 2; i++){
-			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
-				x += Bola.TAMANIO;
-		}
+//		x = 10;
+//		yPos = 20;
+//		for(int i = 0; i < nBolas - 2; i++){
+//			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
+//				x += Bola.TAMANIO;
+//		}
 		
 	}
 

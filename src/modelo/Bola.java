@@ -205,11 +205,31 @@ public class Bola {
 		return null;
 		
 	}
+	
+	public ArrayList<Bola> colision(ArrayList<Bola> nivel) {
+		ArrayList<Bola> temp = new ArrayList<Bola>();
+		//porque esa Y??
+		if(getY() <= 0)
+			temp.add(this);
+
+			for(Bola it : nivel){
+				if( choca(it)){
+					System.out.println("Choque con la bola: " + nivel.indexOf(it));
+					temp.add(it);
+				}
+			}
+		
+		return temp;
+		
+	}
 
 	private boolean choca(Bola it) {
 			// Si la bola llega a la misma posicion
 		ArrayList<Integer> puntosCalientes = new ArrayList<Integer>();
-			if( dentroCuadrado(getX() + (RADIO ), it)){
+		puntosCalientes.add(getX() + RADIO ); //Punto del medio de arriba
+		puntosCalientes.add(getY() + RADIO ); // Punto del medio de la izquierda
+		puntosCalientes.add(getX() + TAMANIO);
+			if( dentroCuadrado(puntosCalientes, it)){
 				//it.setColor(Color.BLACK);
 				return true;
 			}
@@ -218,11 +238,22 @@ public class Bola {
 	}
 
 
-	private boolean dentroCuadrado(int pCaliente, Bola it) {
-		if( (pCaliente >= it.getX() && pCaliente <= (it.getX() + TAMANIO)) && 
-				( getY() >= it.getVelocidadY() && getY() <= (it.getY() + TAMANIO))  )
+	private boolean dentroCuadrado(ArrayList<Integer> puntosCalientes, Bola it) {
+		
+		// Linea inferior
+		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
+				( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO))  )
 			return true;
-		return false;
+		//Linea Lateral Izquierda
+		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
+				( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
+			return true;
+		
+		//Linea Lateral Izquierda
+				if( (puntosCalientes.get(2) >= it.getX() && puntosCalientes.get(2) <= (it.getX() + TAMANIO)) && 
+						( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
+					return true;
+			return false;
 	}
 
 

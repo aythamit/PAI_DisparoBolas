@@ -30,6 +30,7 @@ public class PanelJuego extends JPanel {
 	Canion canion = new Canion(PANEL_WIDTH / 2 , PANEL_HEIGTH -40);
 	Bola bolaCanion;
 	ArrayList<Bola> nivel;
+	boolean debug =true;
 	
 	public PanelJuego(){
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
@@ -44,6 +45,7 @@ public class PanelJuego extends JPanel {
 		ControladorTeclado tecladoListen= new ControladorTeclado(getCanion(), this, getBolaCanion() , getNivel());
 		addKeyListener(tecladoListen);
 		addMouseListener(tecladoListen);
+		addMouseMotionListener(tecladoListen);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -60,6 +62,9 @@ public class PanelJuego extends JPanel {
 		g2.setColor(getBolaCanion().getColor());
 		g2.fillOval(getBolaCanion().getX() - Bola.POSCANION, getBolaCanion().getY() - Bola.POSCANION
 				, Bola.TAMANIO, Bola.TAMANIO);
+		if(debug)
+			g2.drawRect(getBolaCanion().getX() - Bola.POSCANION, getBolaCanion().getY() - Bola.POSCANION
+					, Bola.TAMANIO, Bola.TAMANIO);
 	}
 
 	private void dibujaNivel(Graphics2D g2) {
@@ -67,6 +72,8 @@ public class PanelJuego extends JPanel {
 		for(Bola it : getNivel()){
 			g2.setColor(it.getColor());
 			g2.fillOval(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
+			if(debug)
+				g2.drawRect(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
 		}
 		
 	}

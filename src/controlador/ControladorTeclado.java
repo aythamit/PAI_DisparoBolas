@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import modelo.Bola;
@@ -20,7 +21,7 @@ import modelo.Canion;
 import modelo.Utiles;
 import vista.PanelJuego;
 
-public class ControladorTeclado implements KeyListener , MouseListener{
+public class ControladorTeclado implements KeyListener , MouseListener , MouseMotionListener{
 	
 	private static final int TIEMPO = 5;
 	
@@ -72,24 +73,34 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 			public void run() {
 				try {
 					getBolaCanion().setAngulo( getCanion().getGrados());
-					Bola temporal = null;
-					while(temporal == null){ // Mientras este rodando
-						temporal = getBolaCanion().Colision(getNivel());
+					ArrayList<Bola> temporal = new ArrayList<Bola>();
+					while(temporal.size() == 0){ // Mientras este rodando
+						temporal = getBolaCanion().colision(getNivel());
 						getBolaCanion().move();
 						getPanel().repaint();
 						Thread.sleep(TIEMPO);
 					} // Cuando colisiona ->
 					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del cañon: " + getBolaCanion().getColor());
-					if( !temporal.equals(getBolaCanion()) && temporal.getColor().equals(getBolaCanion().getColor())){
-						//Elimimanos temporal del array
-						//System.out.println("Son del mismo color");
-						getNivel().remove(temporal);
-					}else{
-						//La metemos dentro del array
-					Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY() + 1, Bola.ESTATICA);
-					bolaTemp.setColor(getBolaCanion().getColor());
-					getNivel().add(bolaTemp);		
+					if(temporal.size() == 1){ //Colisiona con uno
+////						if(temporal.get(0).equals(getBolaCanion()))
+////							getNivel().add(getBolaCanion());
+//						else
+							getNivel().remove( temporal.get(0));
+					} else if(temporal.size() > 1){
+						// Sonido de error Tiro fallido
 					}
+					
+//					
+//					if( !temporal.equals(getBolaCanion()) && temporal.getColor().equals(getBolaCanion().getColor())){
+//						//Elimimanos temporal del array
+//						//System.out.println("Son del mismo color");
+//						getNivel().remove(temporal);
+//					}else{
+//						//La metemos dentro del array
+//					Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY() + 1, Bola.ESTATICA);
+//					bolaTemp.setColor(getBolaCanion().getColor());
+//					getNivel().add(bolaTemp);		
+//					}
 					
 					getBolaCanion().reset(getCanion().getxFinal() , getCanion().getyFinal());
 					getBolaCanion().setColor(Utiles.colorBolaAleatorio());
@@ -163,10 +174,11 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		getCanion().calculoNuevaPos(e.getX(), e.getY());
-		if(!getBolaCanion().isRunning())
-			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
-		getBolaCanion().setAngulo(getCanion().getGrados());
+		lanzarBola();
+		if(getBolaCanion().isRunning()){
+		//x.interrupt();
+		getBolaCanion().setRunning(false);
+		}
 		getPanel().repaint();
 		
 	}
@@ -174,6 +186,22 @@ public class ControladorTeclado implements KeyListener , MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		getCanion().calculoNuevaPos(e.getX(), e.getY());
+		if(!getBolaCanion().isRunning())
+			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
+		getBolaCanion().setAngulo(getCanion().getGrados());
+		getPanel().repaint();
 		
 	}
 
