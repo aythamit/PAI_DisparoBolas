@@ -14,6 +14,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controlador.ControladorTeclado;
@@ -28,17 +30,20 @@ public class PanelJuego extends JPanel {
 	public static final int PANEL_HEIGTH = VentanaJuego.FRAME_HEIGTH ;
 	
 	Canion canion = new Canion(PANEL_WIDTH / 2 , PANEL_HEIGTH -40);
-	Bola bolaCanion;
-	ArrayList<Bola> nivel;
-	boolean debug =true;
+	private Bola bolaCanion;
+	private ArrayList<Bola> nivel;
+	private boolean debug = false;
+	private JLabel icono;
 	
 	public PanelJuego(){
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
 		setBackground(Color.WHITE);
 		setFocusable(true);
 		setNivel(new ArrayList<Bola>());
-		setBolaCanion(new Bola(canion.getxFinal(), canion.getyFinal() 
+		setBolaCanion(new Bola(canion.getxInicio(), canion.getyInicio() 
 				, Bola.VELOCIDAD));
+		ImageIcon icon = new ImageIcon("icon-info.png");
+	    setIcono(new JLabel(icon));
 		int yPos = 0;
 		int nBolas = PANEL_WIDTH / Bola.TAMANIO;
 		Utiles.aniadirBolas( yPos, nBolas , getNivel());
@@ -46,6 +51,8 @@ public class PanelJuego extends JPanel {
 		addKeyListener(tecladoListen);
 		addMouseListener(tecladoListen);
 		addMouseMotionListener(tecladoListen);
+		add(getIcono());
+		
 	}
 	
 	public void paintComponent(Graphics g){
@@ -73,7 +80,10 @@ public class PanelJuego extends JPanel {
 			g2.setColor(it.getColor());
 			g2.fillOval(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
 			if(debug)
+			{
+				g2.setStroke(new BasicStroke(2));
 				g2.drawRect(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
+			}
 		}
 		
 	}
@@ -141,6 +151,30 @@ public class PanelJuego extends JPanel {
 
 	public void setNivel(ArrayList<Bola> nivel) {
 		this.nivel = nivel;
+	}
+
+	public JLabel getIcono() {
+		return icono;
+	}
+
+	public void setIcono(JLabel icono) {
+		this.icono = icono;
+	}
+
+	/**
+	 * Getter de debug
+	 * @return the debug
+	 */
+	public boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * Setter de debug
+	 * @param debug the debug to set
+	 */
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 
 }

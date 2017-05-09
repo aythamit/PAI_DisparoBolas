@@ -14,16 +14,23 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import modelo.Bola;
 import modelo.Canion;
+import modelo.Sonidos;
 import modelo.Utiles;
 import vista.PanelJuego;
+import vista.VentanaInformacion;
 
 public class ControladorTeclado implements KeyListener , MouseListener , MouseMotionListener{
 	
-	private static final int TIEMPO = 5;
+	private static final int TIEMPO = 2;
 	
 	Canion canion;
 	Bola bolaCanion;
@@ -34,6 +41,46 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		setPanel(panelJuego);
 		setBolaCanion(bolaCan);
 		setNivel(nivel);
+		
+		aniadirInfo();
+	}
+
+	private void aniadirInfo() {
+
+
+		getPanel().getIcono().addMouseListener(new MouseListener() {
+	       
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("Hola");
+				VentanaInformacion nuevaVentana = new VentanaInformacion();
+			}
+
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	public Canion getCanion() {
@@ -48,8 +95,6 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT){
 			getCanion().mover(e);
-			if(!getBolaCanion().isRunning())
-				getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
 				getBolaCanion().setAngulo(getCanion().getGrados());
 			getPanel().repaint();
 		} if(e.getKeyCode() == KeyEvent.VK_SPACE && !getBolaCanion().isRunning()){
@@ -64,11 +109,20 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		if(e.getKeyCode() == KeyEvent.VK_F5){
 			getPanel().repaint();
 		}
+		if(e.getKeyCode() == KeyEvent.VK_F4){
+			if(getPanel().isDebug())
+				getPanel().setDebug(false);
+			else
+				getPanel().setDebug(true);
+				
+		}
+			getPanel().repaint();
 	}
 
 
 	private void lanzarBola() {
 		getBolaCanion().setRunning(true);
+		getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
 		Thread one = new Thread(new Runnable(){
 			public void run() {
 				try {
@@ -82,15 +136,27 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 					} // Cuando colisiona ->
 					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del cañon: " + getBolaCanion().getColor());
 					if(temporal.size() == 1){ //Colisiona con uno
-////						if(temporal.get(0).equals(getBolaCanion()))
-////							getNivel().add(getBolaCanion());
+//						if(temporal.get(0) == getBolaCanion())
+//							getNivel().add(getBolaCanion());
 //						else
 							getNivel().remove( temporal.get(0));
+							
+							String nombreSonido = "sounds/acierto.wav"; 
+					    	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
+					    	Clip acierto = AudioSystem.getClip();
+					    	acierto.open(audioInputStream);
+					    	acierto.start();
 					} else if(temporal.size() > 1){
 						// Sonido de error Tiro fallido
+						String nombreSonido = "sounds/error.wav"; 
+				    	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
+				    	Clip error = AudioSystem.getClip();
+				    	error.open(audioInputStream);
+				    	error.start();
+						
 					}
 					
-//					
+				
 //					if( !temporal.equals(getBolaCanion()) && temporal.getColor().equals(getBolaCanion().getColor())){
 //						//Elimimanos temporal del array
 //						//System.out.println("Son del mismo color");
@@ -102,10 +168,9 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 //					getNivel().add(bolaTemp);		
 //					}
 					
-					getBolaCanion().reset(getCanion().getxFinal() , getCanion().getyFinal());
+					getBolaCanion().reset(getCanion().getxInicio() , getCanion().getyInicio());
 					getBolaCanion().setColor(Utiles.colorBolaAleatorio());
 					
-					getNivel().get(2).setColor(Color.BLACK);
 					getPanel().repaint();
 					
 				} catch (Exception e){ e.printStackTrace(); }
@@ -117,6 +182,23 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 
 			
 	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		getCanion().calculoNuevaPos(e.getX(), e.getY());			
+//		getBolaCanion().setAngulo(getCanion().getGrados());
+		getPanel().repaint();
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+		lanzarBola();
+		getPanel().repaint();
+		
+	}
+
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -168,19 +250,6 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-		lanzarBola();
-		if(getBolaCanion().isRunning()){
-		//x.interrupt();
-		getBolaCanion().setRunning(false);
-		}
-		getPanel().repaint();
-		
 	}
 
 	@Override
@@ -195,14 +264,5 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		
 	}
 
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		getCanion().calculoNuevaPos(e.getX(), e.getY());
-		if(!getBolaCanion().isRunning())
-			getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
-		getBolaCanion().setAngulo(getCanion().getGrados());
-		getPanel().repaint();
-		
-	}
 
 }

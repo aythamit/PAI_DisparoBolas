@@ -17,7 +17,7 @@ public class Bola {
 
 	public static final int ESTATICA = 0;
 	public static final int VELOCIDAD = 1;
-	public static final int TAMANIO = 20;
+	public static final int TAMANIO = 50;
 	public static final int POSCANION = TAMANIO / 2;
 	private static final int RADIO = TAMANIO / 2;
 	Color color;
@@ -245,9 +245,9 @@ public class Bola {
 				( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO))  )
 			return true;
 		//Linea Lateral Izquierda
-		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
-				( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
-			return true;
+//		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
+//				( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
+//			return true;
 		
 		//Linea Lateral Izquierda
 				if( (puntosCalientes.get(2) >= it.getX() && puntosCalientes.get(2) <= (it.getX() + TAMANIO)) && 
