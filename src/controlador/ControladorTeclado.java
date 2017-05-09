@@ -29,7 +29,7 @@ import vista.VentanaInformacion;
 
 public class ControladorTeclado implements KeyListener , MouseListener , MouseMotionListener{
 	
-	private static final int TIEMPO = 2;
+	private static final int TIEMPO = 1;
 	
 	Canion canion;
 	Bola bolaCanion;
@@ -129,6 +129,9 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		getPanel().setColoresPosibles(coloresActuales);
 	}
 
+	/**
+	 * Lanza la bola del cañon en la direccion del cañon
+	 */
 	private void lanzarBola() {
 		getBolaCanion().setRunning(true);
 		getBolaCanion().moveCanion(getCanion().getxFinal(), getCanion().getyFinal());
@@ -148,16 +151,23 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 					} // Cuando colisiona ->
 					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del ca�on: " + getBolaCanion().getColor());
 					if(temporal.size() == 1){ //Colisiona con uno
-//						if(temporal.get(0) == getBolaCanion())
-//							getNivel().add(getBolaCanion());
-//						else
-							getNivel().remove( temporal.get(0));
-							eliminaColores();
+							
 							String nombreSonido = "sounds/acierto.wav"; 
 					    	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
 					    	Clip acierto = AudioSystem.getClip();
 					    	acierto.open(audioInputStream);
 					    	acierto.start();
+					    	if( temporal.get(0).getColor().equals(getBolaCanion().getColor())){
+					    		getPanel().setScore(getPanel().getScore() + 10);
+					    		getNivel().remove( temporal.get(0));
+								eliminaColores();
+							} else{
+								int posYBola = getBolaCanion().getY();
+								int posXBola = calculaX(posYBola , temporal.get(0).getX());
+								Bola bolaTemp = new Bola(temporal.get(0).getX() + Bola.POSCANION, getBolaCanion().getY(), Bola.ESTATICA , getPanel().getColoresPosibles());
+								bolaTemp.setColor(getBolaCanion().getColor());
+								getNivel().add(bolaTemp);	
+							}
 					} else if(temporal.size() > 1){
 						// Sonido de error Tiro fallido
 						String nombreSonido = "sounds/error.wav"; 
@@ -165,21 +175,12 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 				    	Clip error = AudioSystem.getClip();
 				    	error.open(audioInputStream);
 				    	error.start();
-
+				    	
+				    	Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY() + 1, Bola.ESTATICA , getPanel().getColoresPosibles());
+						bolaTemp.setColor(getBolaCanion().getColor());
+						getNivel().add(bolaTemp);
 						
 					}
-					
-				
-//					if( !temporal.equals(getBolaCanion()) && temporal.getColor().equals(getBolaCanion().getColor())){
-//						//Elimimanos temporal del array
-//						//System.out.println("Son del mismo color");
-//						getNivel().remove(temporal);
-//					}else{
-//						//La metemos dentro del array
-//					Bola bolaTemp = new Bola(getBolaCanion().getX(), getBolaCanion().getY() + 1, Bola.ESTATICA);
-//					bolaTemp.setColor(getBolaCanion().getColor());
-//					getNivel().add(bolaTemp);		
-//					}
 					
 					getBolaCanion().reset(getCanion().getxInicio() , getCanion().getyInicio());
 					if(!getPanel().getColoresPosibles().isEmpty())
@@ -192,6 +193,15 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 				} catch (Exception e){ e.printStackTrace(); }
 				
 				}
+
+			private int calculaX(int posYBola, int x) {
+				int temp = posYBola%Bola.TAMANIO;
+					if(temp % 2 == 0)
+						return x;
+					else
+						return x+Bola.POSCANION;
+
+			}
 			});
 			one.start();
 			
@@ -199,6 +209,15 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 			
 	}
 	
+	public ArrayList<Bola> eliminaBolaColores(ArrayList<Bola> aEliminar , Bola temp){
+		aEliminar.add(temp);
+		for(Bola it : nivel){
+			if( temp.choca(it) && temp.getColor().equals(it.getColor())){
+							
+			}
+		}
+		return aEliminar;
+	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		getCanion().calculoNuevaPos(e.getX(), e.getY());			

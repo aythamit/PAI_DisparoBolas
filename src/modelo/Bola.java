@@ -214,7 +214,7 @@ public class Bola {
 		
 	}
 
-	private boolean choca(Bola it) {
+	public boolean choca(Bola it) {
 //			// Si la bola llega a la misma posicion
 			if( dentroCuadrado(it)){
 			
@@ -231,7 +231,7 @@ public class Bola {
 		// Linea inferior
 		
 		for(int i = getX() + 10; i < getX() + TAMANIO - 10 ; i++){
-			if( i >= it.getX() && i <= (it.getX() + TAMANIO)  && ( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO) ) )
+			if( i >= it.getX() - POSCANION && i <= (it.getX() + TAMANIO)  && ( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO) ) )
 				return true;
 		}
 		int x = getX() + TAMANIO;
@@ -241,7 +241,7 @@ public class Bola {
 		}
 		x = getX();
 		for(int i = getY() + 10; i < getY() + TAMANIO - 10; i++){
-			if( x >= it.getX() && x <= (it.getX() + TAMANIO)  && ( i >= it.getY() && i <= (it.getY() + TAMANIO) ) )
+			if( x >= it.getX() - POSCANION && x <= (it.getX() + TAMANIO)  && ( i >= it.getY() && i <= (it.getY() + TAMANIO) ) )
 				return true;
 		}
 				

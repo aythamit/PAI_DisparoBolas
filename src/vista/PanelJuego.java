@@ -35,6 +35,7 @@ public class PanelJuego extends JPanel {
 	private ArrayList<Color> coloresPosibles;
 	private boolean debug = false;
 	private JLabel icono;
+	private int score;
 	
 	public PanelJuego(){
 		setColoresPosibles(new ArrayList<Color>());
@@ -43,6 +44,7 @@ public class PanelJuego extends JPanel {
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
 		setBackground(Color.WHITE);
 		setFocusable(true);
+		setScore(0);
 		setNivel(new ArrayList<Bola>());
 		setBolaCanion(new Bola(canion.getxInicio(), canion.getyInicio() 
 				, Bola.VELOCIDAD, getColoresPosibles()));
@@ -70,14 +72,20 @@ public class PanelJuego extends JPanel {
 		dibujaCanion(g2);
 		dibujaBola(g2);
 		dibujaNivel(g2);
+		dibujaScore(g2);
 		if(isDebug())
 		dibujaInfo(g2);
 	}
 
+	private void dibujaScore(Graphics2D g2) {
+		g2.setColor(Color.BLACK);
+		g2.drawString("Score: " + getScore() , 100, 550);
+		
+	}
 	private void dibujaBola(Graphics2D g2) {
 		// TODO Auto-generated method stub
 		g2.setColor(getBolaCanion().getColor());
-		g2.fillOval(getBolaCanion().getX(), getBolaCanion().getY()
+		g2.fillOval(getBolaCanion().getX() - Bola.POSCANION, getBolaCanion().getY() - Bola.POSCANION
 				, Bola.TAMANIO, Bola.TAMANIO);
 		if(debug)
 			g2.drawRect(getBolaCanion().getX() + 10, getBolaCanion().getY() + 10
@@ -201,6 +209,12 @@ public class PanelJuego extends JPanel {
 	 */
 	public void setColoresPosibles(ArrayList<Color> coloresPosibles) {
 		this.coloresPosibles = coloresPosibles;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }

@@ -97,17 +97,25 @@ public class Utiles {
 	public static void aniadirBolas(int yPos, int nBolas, ArrayList<Bola> nivel, ArrayList<Color> colores) {
 		
 		int x = 0;
-		for(int i = 0; i < nBolas - 1; i++){
+		int y = yPos;
+		for(int k = 0; k < 4; k++){
+			if(k%2 != 0){
+				x = Bola.POSCANION;
+			}else{
+				x = 0;
+			}
+			for(int i = 0; i < nBolas - 1; i++){
+				nivel.add(new Bola( x , yPos, Bola.ESTATICA, colores));
+					x += Bola.TAMANIO;
+			}
+			yPos += Bola.TAMANIO;
+		}
+		x = Bola.POSCANION;
+		yPos = Bola.TAMANIO;
+		for(int i = 0; i < nBolas - 2; i++){
 			nivel.add(new Bola( x , yPos, Bola.ESTATICA, colores));
 				x += Bola.TAMANIO;
 		}
-		
-//		x = Bola.POSCANION;
-//		yPos = Bola.TAMANIO;
-//		for(int i = 0; i < nBolas - 2; i++){
-//			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
-//				x += Bola.TAMANIO;
-//		}
 		
 	}
 

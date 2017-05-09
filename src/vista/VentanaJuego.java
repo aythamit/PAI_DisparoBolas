@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 public class VentanaJuego extends JFrame {
 	
-	public static final int FRAME_WIDTH = 800;
+	public static final int FRAME_WIDTH = 1300;
 	public static final int FRAME_HEIGTH = 600;
 	private PanelJuego bubbleshot;
 	private JPanel panelPrincipal;
