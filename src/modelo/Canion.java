@@ -16,10 +16,10 @@ public class Canion {
 	private final static int GRADOS_MAX = 180;
 	private final static int GRADOS_INICIO = 90;
 	private final static int TAMANIO_CANION = 50;
-	private int xInicio; // Posicion inicio x del cañon
-	private int yInicio; // Posicion inicio y del cañon
-	private int xFinal; // Posicion final x del cañon
-	private int yFinal; // Posicion final y del cañon
+	private int xInicio; // Posicion inicio x del caï¿½on
+	private int yInicio; // Posicion inicio y del caï¿½on
+	private int xFinal; // Posicion final x del caï¿½on
+	private int yFinal; // Posicion final y del caï¿½on
 	private double grados; //Grado de inclinacion
 	
 	public Canion(int x, int y){
@@ -83,8 +83,7 @@ public class Canion {
 	public void setGrados(double grados) {
 		if( grados > GRADOS_MIN && grados < GRADOS_MAX)
 			this.grados = grados;
-		else
-			System.out.println("Lanzar excepcion");
+		
 	}
 
 	public void mover(KeyEvent e) {

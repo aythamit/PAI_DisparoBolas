@@ -32,27 +32,36 @@ public class PanelJuego extends JPanel {
 	Canion canion = new Canion(PANEL_WIDTH / 2 , PANEL_HEIGTH -40);
 	private Bola bolaCanion;
 	private ArrayList<Bola> nivel;
+	private ArrayList<Color> coloresPosibles;
 	private boolean debug = false;
 	private JLabel icono;
 	
 	public PanelJuego(){
+		setColoresPosibles(new ArrayList<Color>());
+		anidirColores();
+		setLayout(null);
 		setSize(PANEL_WIDTH, PANEL_HEIGTH);
 		setBackground(Color.WHITE);
 		setFocusable(true);
 		setNivel(new ArrayList<Bola>());
 		setBolaCanion(new Bola(canion.getxInicio(), canion.getyInicio() 
-				, Bola.VELOCIDAD));
+				, Bola.VELOCIDAD, getColoresPosibles()));
 		ImageIcon icon = new ImageIcon("icon-info.png");
 	    setIcono(new JLabel(icon));
 		int yPos = 0;
 		int nBolas = PANEL_WIDTH / Bola.TAMANIO;
-		Utiles.aniadirBolas( yPos, nBolas , getNivel());
+		Utiles.aniadirBolas( yPos, nBolas , getNivel() , getColoresPosibles());
 		ControladorTeclado tecladoListen= new ControladorTeclado(getCanion(), this, getBolaCanion() , getNivel());
 		addKeyListener(tecladoListen);
 		addMouseListener(tecladoListen);
 		addMouseMotionListener(tecladoListen);
+		getIcono().setBounds(30, 540, 32, 32);
 		add(getIcono());
 		
+	}
+	public void anidirColores(){
+		for(int i = 0; i < 5; i++)
+			getColoresPosibles().add( Utiles.colorBolaPrefefinido(i));
 	}
 	
 	public void paintComponent(Graphics g){
@@ -61,17 +70,18 @@ public class PanelJuego extends JPanel {
 		dibujaCanion(g2);
 		dibujaBola(g2);
 		dibujaNivel(g2);
+		if(isDebug())
 		dibujaInfo(g2);
 	}
 
 	private void dibujaBola(Graphics2D g2) {
 		// TODO Auto-generated method stub
 		g2.setColor(getBolaCanion().getColor());
-		g2.fillOval(getBolaCanion().getX() - Bola.POSCANION, getBolaCanion().getY() - Bola.POSCANION
+		g2.fillOval(getBolaCanion().getX(), getBolaCanion().getY()
 				, Bola.TAMANIO, Bola.TAMANIO);
 		if(debug)
-			g2.drawRect(getBolaCanion().getX() - Bola.POSCANION, getBolaCanion().getY() - Bola.POSCANION
-					, Bola.TAMANIO, Bola.TAMANIO);
+			g2.drawRect(getBolaCanion().getX() + 10, getBolaCanion().getY() + 10
+					, Bola.TAMANIO -15, Bola.TAMANIO -15);
 	}
 
 	private void dibujaNivel(Graphics2D g2) {
@@ -82,7 +92,7 @@ public class PanelJuego extends JPanel {
 			if(debug)
 			{
 				g2.setStroke(new BasicStroke(2));
-				g2.drawRect(it.getX(), it.getY(), Bola.TAMANIO, Bola.TAMANIO);
+				g2.drawRect(it.getX() + 10, it.getY() + 10, Bola.TAMANIO -15, Bola.TAMANIO -15);
 			}
 		}
 		
@@ -99,7 +109,7 @@ public class PanelJuego extends JPanel {
 		// TODO Auto-generated method stub
 		int con = 20;
 		int xInfo = 50, yInfo = PANEL_HEIGTH - 200;
-		double pendiente = 1;
+		double pendiente;
 		if(getCanion().getGrados() == 90){
 			pendiente = 1;
 		}else{
@@ -112,8 +122,8 @@ public class PanelJuego extends JPanel {
 		int yInicio = getCanion().getyFinal();
 //		int xInicio = getBolaCanion().getX();
 //		int yInicio = getBolaCanion().getY();
-		int xFinal = (int) (xInicio -  600 * Math.cos(Math.toRadians(getBolaCanion().getAngulo()))) ;
-		int yFinal = (int) (yInicio - 600 * Math.sin(Math.toRadians(getBolaCanion().getAngulo()))) ;
+		int xFinal = (int) (xInicio -  600 * Math.cos(Math.toRadians(getCanion().getGrados()))) ;
+		int yFinal = (int) (yInicio - 600 * Math.sin(Math.toRadians(getCanion().getGrados()))) ;
 		
 		g2.drawString("Bola: " + getBolaCanion().getX() + " , " + getBolaCanion().getY(), xInfo, yInfo + con);
 		g2.drawString("Grados C: " + getCanion().getGrados(), xInfo, yInfo + con * 2);
@@ -175,6 +185,22 @@ public class PanelJuego extends JPanel {
 	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+
+	/**
+	 * Getter de coloresPosibles
+	 * @return the coloresPosibles
+	 */
+	public ArrayList<Color> getColoresPosibles() {
+		return coloresPosibles;
+	}
+
+	/**
+	 * Setter de coloresPosibles
+	 * @param coloresPosibles the coloresPosibles to set
+	 */
+	public void setColoresPosibles(ArrayList<Color> coloresPosibles) {
+		this.coloresPosibles = coloresPosibles;
 	}
 
 }

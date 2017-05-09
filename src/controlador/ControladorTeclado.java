@@ -23,7 +23,6 @@ import javax.sound.sampled.Clip;
 
 import modelo.Bola;
 import modelo.Canion;
-import modelo.Sonidos;
 import modelo.Utiles;
 import vista.PanelJuego;
 import vista.VentanaInformacion;
@@ -101,7 +100,6 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 			
 				lanzarBola();
 				if(getBolaCanion().isRunning()){
-				//x.interrupt();
 				getBolaCanion().setRunning(false);
 				}
 				getPanel().repaint();
@@ -118,7 +116,18 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		}
 			getPanel().repaint();
 	}
-
+	
+	public void eliminaColores() {
+		ArrayList<Color> coloresActuales = new ArrayList<Color>();
+		
+		for(Bola it : getNivel()){
+			
+			if(!coloresActuales.contains(it.getColor())){
+					coloresActuales.add(it.getColor());
+				}
+		}
+		getPanel().setColoresPosibles(coloresActuales);
+	}
 
 	private void lanzarBola() {
 		getBolaCanion().setRunning(true);
@@ -126,6 +135,9 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 		Thread one = new Thread(new Runnable(){
 			public void run() {
 				try {
+					
+					if(!getPanel().getColoresPosibles().isEmpty()){
+						
 					getBolaCanion().setAngulo( getCanion().getGrados());
 					ArrayList<Bola> temporal = new ArrayList<Bola>();
 					while(temporal.size() == 0){ // Mientras este rodando
@@ -134,13 +146,13 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 						getPanel().repaint();
 						Thread.sleep(TIEMPO);
 					} // Cuando colisiona ->
-					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del cañon: " + getBolaCanion().getColor());
+					//System.out.println("Color Colisionada: " + temporal.getColor() + " Bola del caï¿½on: " + getBolaCanion().getColor());
 					if(temporal.size() == 1){ //Colisiona con uno
 //						if(temporal.get(0) == getBolaCanion())
 //							getNivel().add(getBolaCanion());
 //						else
 							getNivel().remove( temporal.get(0));
-							
+							eliminaColores();
 							String nombreSonido = "sounds/acierto.wav"; 
 					    	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
 					    	Clip acierto = AudioSystem.getClip();
@@ -153,6 +165,7 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 				    	Clip error = AudioSystem.getClip();
 				    	error.open(audioInputStream);
 				    	error.start();
+
 						
 					}
 					
@@ -169,9 +182,12 @@ public class ControladorTeclado implements KeyListener , MouseListener , MouseMo
 //					}
 					
 					getBolaCanion().reset(getCanion().getxInicio() , getCanion().getyInicio());
-					getBolaCanion().setColor(Utiles.colorBolaAleatorio());
+					if(!getPanel().getColoresPosibles().isEmpty())
+					getBolaCanion().setColor(Utiles.colorBolaAleatorio(getPanel().getColoresPosibles()));
 					
 					getPanel().repaint();
+					
+					}
 					
 				} catch (Exception e){ e.printStackTrace(); }
 				

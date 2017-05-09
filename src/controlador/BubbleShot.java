@@ -8,9 +8,19 @@
  */
 package controlador;
 
+import javax.swing.JApplet;
+
 import vista.VentanaJuego;
 
-public class BubbleShot {
+public class BubbleShot extends JApplet{
+	
+	public void init(){
+
+		VentanaJuego frame = new VentanaJuego();
+		this.add(frame.getBubbleshot());
+		frame.setVisible(false);
+
+	}
 
 	/**
 	 * @param args

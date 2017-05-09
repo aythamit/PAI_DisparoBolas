@@ -23,7 +23,7 @@ public class VentanaInformacion extends JFrame{
 	
 	public VentanaInformacion(){
 		setTitle("Informacion");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(400,150);
 		setPractica(new JLabel("Practica 13 - Juego de Disparos"));
 		setAsignatura(new JLabel("Programacion de Aplicaciones Interactivas"));

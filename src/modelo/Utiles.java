@@ -20,6 +20,7 @@ public class Utiles {
 	public final static int AMARILLO = 2;
 	public final static int ROJO = 3;
 	public final static int VERDE = 4;
+	public final static Integer[] colors = { MORADO , AZUL , AMARILLO , ROJO , VERDE };
 	
 	/**
 	 * @return Un color aleatorio para la bola
@@ -49,6 +50,37 @@ public class Utiles {
 		
 		return color;
 	}
+	public static Color colorBolaPrefefinido(int colore) {
+		
+		Color color = null;
+		switch(colore){
+		case MORADO :{
+			color = new Color(153,51,197);
+		}break;
+		case AZUL :{
+			color = new Color(43,93,212);
+		}break;
+		case AMARILLO :{
+			color = new Color(255, 254, 14);
+		}break;
+		case ROJO :{
+			color = new Color(255,17,17);
+		}break;
+		case VERDE :{
+			color = new Color(43,208,48);
+		}break;
+			default:
+				color = Color.BLACK;
+		}
+		
+		return color;
+	}
+	
+	public static Color colorBolaAleatorio(ArrayList<Color> colores) {
+		int select = (int) (Math.random() * colores.size());
+	
+		return colores.get(select);
+	}
 
 	
 	/**
@@ -62,19 +94,20 @@ public class Utiles {
 		return new Color(red, green, blue);
 	}
 
-	public static void aniadirBolas(int yPos, int nBolas, ArrayList<Bola> nivel) {
+	public static void aniadirBolas(int yPos, int nBolas, ArrayList<Bola> nivel, ArrayList<Color> colores) {
+		
 		int x = 0;
 		for(int i = 0; i < nBolas - 1; i++){
-			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
+			nivel.add(new Bola( x , yPos, Bola.ESTATICA, colores));
 				x += Bola.TAMANIO;
 		}
 		
-		x = Bola.POSCANION;
-		yPos = Bola.TAMANIO;
-		for(int i = 0; i < nBolas - 2; i++){
-			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
-				x += Bola.TAMANIO;
-		}
+//		x = Bola.POSCANION;
+//		yPos = Bola.TAMANIO;
+//		for(int i = 0; i < nBolas - 2; i++){
+//			nivel.add(new Bola( x , yPos, Bola.ESTATICA));
+//				x += Bola.TAMANIO;
+//		}
 		
 	}
 

@@ -33,11 +33,11 @@ public class Bola {
 	private boolean running;
 	private boolean derecha = false;
 	
-	public Bola(int x, int y, int modo){
+	public Bola(int x, int y, int modo, ArrayList<Color> colores){
 		setAngulo(0);
 		reset(x, y);
 		setRunning(false);
-		setColor(Utiles.colorBolaAleatorio());
+		setColor(Utiles.colorBolaAleatorio(colores));
 		if(modo == ESTATICA){
 			setVelocidadX(ESTATICA);
 			setVelocidadY(ESTATICA);
@@ -145,15 +145,7 @@ public class Bola {
 		setX( xFinal );
 		setY( yFinal );
 		setVelocidadX(getVelocidadX()+ 1);
-//		double radians = Math.toRadians(grados);
-//		double pendiente = Math.tan(radians);
-//		// System.out.println(getY() + " y = " + pendiente + " x -> " + (int)(getX() * pendiente) );
-//		//setX( getX() - getVelocidadX());
-//		setY( getY() - getVelocidadY());
-//		if(getX() >= PanelJuego.PANEL_WIDTH || x < 0)
-//			setVelocidadX( -getVelocidadX());
-//		if(getY() >= PanelJuego.PANEL_HEIGTH || getY() < 0)
-//			setVelocidadY( -getVelocidadY());
+
 	}
 
 
@@ -214,7 +206,6 @@ public class Bola {
 
 			for(Bola it : nivel){
 				if( choca(it)){
-					System.out.println("Choque con la bola: " + nivel.indexOf(it));
 					temp.add(it);
 				}
 			}
@@ -224,36 +215,37 @@ public class Bola {
 	}
 
 	private boolean choca(Bola it) {
-			// Si la bola llega a la misma posicion
-		ArrayList<Integer> puntosCalientes = new ArrayList<Integer>();
-		puntosCalientes.add(getX() + RADIO ); //Punto del medio de arriba
-		puntosCalientes.add(getY() + RADIO ); // Punto del medio de la izquierda
-		puntosCalientes.add(getX() + TAMANIO);
-			if( dentroCuadrado(puntosCalientes, it)){
-				//it.setColor(Color.BLACK);
+//			// Si la bola llega a la misma posicion
+			if( dentroCuadrado(it)){
+			
 				return true;
 			}
-			//if()
+
+
 		return false;
 	}
 
 
-	private boolean dentroCuadrado(ArrayList<Integer> puntosCalientes, Bola it) {
+	private boolean dentroCuadrado( Bola it) {
 		
 		// Linea inferior
-		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
-				( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO))  )
-			return true;
-		//Linea Lateral Izquierda
-//		if( (puntosCalientes.get(0) >= it.getX() && puntosCalientes.get(0) <= (it.getX() + TAMANIO)) && 
-//				( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
-//			return true;
 		
-		//Linea Lateral Izquierda
-				if( (puntosCalientes.get(2) >= it.getX() && puntosCalientes.get(2) <= (it.getX() + TAMANIO)) && 
-						( puntosCalientes.get(1) >= it.getY() && puntosCalientes.get(1) <= (it.getY() + TAMANIO))  )
-					return true;
-			return false;
+		for(int i = getX() + 10; i < getX() + TAMANIO - 10 ; i++){
+			if( i >= it.getX() && i <= (it.getX() + TAMANIO)  && ( getY() >= it.getY() && getY() <= (it.getY() + TAMANIO) ) )
+				return true;
+		}
+		int x = getX() + TAMANIO;
+		for(int i = getY() + 10; i < getY() + TAMANIO - 10; i++){
+			if( x >= it.getX() && x <= (it.getX() + TAMANIO)  && ( i >= it.getY() && i <= (it.getY() + TAMANIO) ) )
+				return true;
+		}
+		x = getX();
+		for(int i = getY() + 10; i < getY() + TAMANIO - 10; i++){
+			if( x >= it.getX() && x <= (it.getX() + TAMANIO)  && ( i >= it.getY() && i <= (it.getY() + TAMANIO) ) )
+				return true;
+		}
+				
+		return false;
 	}
 
 
